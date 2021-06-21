@@ -31,12 +31,10 @@ public class MarcaController {
     @ResponseBody
     @Transactional
     public List<Marca> lista() {
-        return mr.findAllByOrderByNome();
+        return mr.findByOrderByNome();
     }
 
     @GetMapping("/marcas/{id}")
-    @ResponseBody
-    @Transactional
     public ResponseEntity<Marca> id(@PathVariable Long id) {
         Optional<Marca> m1 = mr.findById(id);
         if (m1.isPresent()) {
