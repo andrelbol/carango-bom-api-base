@@ -1,5 +1,7 @@
-package br.com.caelum.carangobom.marca;
+package br.com.caelum.carangobom.marca.controller;
 
+import br.com.caelum.carangobom.marca.model.Marca;
+import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

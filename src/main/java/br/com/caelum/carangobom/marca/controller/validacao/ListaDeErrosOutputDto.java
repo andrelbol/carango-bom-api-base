@@ -1,6 +1,5 @@
-package br.com.caelum.carangobom.validacao;
+package br.com.caelum.carangobom.marca.controller.validacao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListaDeErrosOutputDto {
