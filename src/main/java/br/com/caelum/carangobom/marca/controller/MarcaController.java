@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 public class MarcaController {
 
     private MarcaRepository mr;
@@ -30,7 +30,6 @@ public class MarcaController {
     }
 
     @GetMapping("/marcas")
-    @ResponseBody
     @Transactional
     public List<Marca> lista() {
         return mr.findByOrderByNome();
@@ -47,7 +46,6 @@ public class MarcaController {
     }
 
     @PostMapping("/marcas")
-    @ResponseBody
     @Transactional
     public ResponseEntity<Marca> cadastra(@Valid @RequestBody Marca m1, UriComponentsBuilder uriBuilder) {
         Marca m2 = mr.save(m1);
@@ -56,7 +54,6 @@ public class MarcaController {
     }
 
     @PutMapping("/marcas/{id}")
-    @ResponseBody
     @Transactional
     public ResponseEntity<Marca> altera(@PathVariable Long id, @Valid @RequestBody Marca m1) {
         Optional<Marca> m2 = mr.findById(id);
@@ -70,7 +67,6 @@ public class MarcaController {
     }
 
     @DeleteMapping("/marcas/{id}")
-    @ResponseBody
     @Transactional
     public ResponseEntity<Marca> deleta(@PathVariable Long id) {
         Optional<Marca> m1 = mr.findById(id);
@@ -85,7 +81,6 @@ public class MarcaController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
     public ListaDeErrosOutputDto validacao(MethodArgumentNotValidException excecao) {
         List<ErroDeParametroOutputDto> l = new ArrayList<>();
         excecao.getBindingResult().getFieldErrors().forEach(e -> {
