@@ -40,7 +40,7 @@ class MarcaControllerTest {
             new Marca(3L, "Fiat")
         );
 
-        when(marcaRepository.findAllByOrderByNome())
+        when(marcaRepository.findByOrderByNome())
             .thenReturn(marcas);
 
         List<Marca> resultado = marcaController.lista();
