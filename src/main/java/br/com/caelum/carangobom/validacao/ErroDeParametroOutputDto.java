@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.marca.controller.validacao;
+package br.com.caelum.carangobom.validacao;
 
 public class ErroDeParametroOutputDto {
 

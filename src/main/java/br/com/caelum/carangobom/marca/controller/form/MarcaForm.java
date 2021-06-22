@@ -3,7 +3,13 @@ package br.com.caelum.carangobom.marca.controller.form;
 import br.com.caelum.carangobom.marca.model.Marca;
 import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class MarcaForm {
+
+    @NotBlank
     private String nome;
 
     public String getNome() {

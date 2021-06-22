@@ -2,20 +2,16 @@ package br.com.caelum.carangobom.marca.controller;
 
 import br.com.caelum.carangobom.marca.controller.dto.MarcaDto;
 import br.com.caelum.carangobom.marca.controller.form.MarcaForm;
-import br.com.caelum.carangobom.marca.controller.validacao.ErroDeParametroOutputDto;
-import br.com.caelum.carangobom.marca.controller.validacao.ListaDeErrosOutputDto;
 import br.com.caelum.carangobom.marca.model.Marca;
 import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +41,7 @@ public class MarcaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<MarcaDto> cadastra(@RequestBody MarcaForm marcaForm, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<MarcaDto> cadastra(@Valid @RequestBody MarcaForm marcaForm, UriComponentsBuilder uriBuilder) {
         Marca marcaCadastrada = marcaRepository.save(marcaForm.converter());
         URI h = uriBuilder.path("/marcas/{id}").buildAndExpand(marcaCadastrada.getId()).toUri();
         return ResponseEntity.created(h).body(new MarcaDto(marcaCadastrada));
@@ -53,7 +49,7 @@ public class MarcaController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<MarcaDto> altera(@PathVariable Long id, @RequestBody MarcaForm marcaForm) {
+    public ResponseEntity<MarcaDto> altera(@PathVariable Long id, @Valid @RequestBody MarcaForm marcaForm) {
         Optional<Marca> marcaAtual = marcaRepository.findById(id);
         if (marcaAtual.isPresent()) {
             Marca marcaAlterada = marcaForm.atualizar(id, marcaRepository);
@@ -75,18 +71,4 @@ public class MarcaController {
         }
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ListaDeErrosOutputDto validacao(MethodArgumentNotValidException excecao) {
-        List<ErroDeParametroOutputDto> l = new ArrayList<>();
-        excecao.getBindingResult().getFieldErrors().forEach(e -> {
-            ErroDeParametroOutputDto d = new ErroDeParametroOutputDto();
-            d.setParametro(e.getField());
-            d.setMensagem(e.getDefaultMessage());
-            l.add(d);
-        });
-        ListaDeErrosOutputDto l2 = new ListaDeErrosOutputDto();
-        l2.setErros(l);
-        return l2;
-    }
 }

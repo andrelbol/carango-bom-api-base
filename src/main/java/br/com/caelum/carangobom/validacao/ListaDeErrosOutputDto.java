@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.marca.controller.validacao;
+package br.com.caelum.carangobom.validacao;
 
 import java.util.List;
 
