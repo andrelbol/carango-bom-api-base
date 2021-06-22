@@ -36,4 +36,8 @@ public class MarcaDto {
         return Objects.equals(id, marcaDto.id) && Objects.equals(nome, marcaDto.nome);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
+    }
 }
