@@ -82,7 +82,7 @@ public class VeiculoController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity deletar(@PathVariable Long id) {
+    public ResponseEntity<Veiculo> deletar(@PathVariable Long id) {
         Optional<Veiculo> veiculo = veiculoRepository.findById(id);
         if (veiculo.isPresent()) {
             veiculoRepository.deleteById(id);
