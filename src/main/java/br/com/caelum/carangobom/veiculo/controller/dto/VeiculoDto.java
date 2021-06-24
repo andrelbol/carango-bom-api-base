@@ -65,10 +65,33 @@ public class VeiculoDto {
 	public static VeiculoDto parse(Veiculo veiculo) {
 		return new VeiculoDto(veiculo.getId(), veiculo.getMarca().getNome(), veiculo.getAno(), veiculo.getModelo(),
 				veiculo.getValor());
-
 	}
 
 	public static List<VeiculoDto> converter(List<Veiculo> veiculos) {
 		return veiculos.stream().map(VeiculoDto::parse).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		VeiculoDto that = (VeiculoDto) o;
+
+		if (ano != that.ano) return false;
+		if (!id.equals(that.id)) return false;
+		if (!marca.equals(that.marca)) return false;
+		if (!modelo.equals(that.modelo)) return false;
+		return valor.equals(that.valor);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + marca.hashCode();
+		result = 31 * result + ano;
+		result = 31 * result + modelo.hashCode();
+		result = 31 * result + valor.hashCode();
+		return result;
 	}
 }

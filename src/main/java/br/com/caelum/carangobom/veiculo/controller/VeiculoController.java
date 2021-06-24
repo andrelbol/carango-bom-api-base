@@ -81,13 +81,13 @@ public class VeiculoController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Veiculo> deletar(@PathVariable Long id) {
+	public ResponseEntity deletar(@PathVariable Long id) {
 		Optional<Veiculo> veiculo = veiculoRepository.findById(id);
 		if (veiculo.isPresent()) {
 			veiculoRepository.deleteById(id);
-			return ResponseEntity.ok(veiculo.get());
-		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok().build();
 		}
+
+		return ResponseEntity.notFound().build();
 	}
 }

@@ -9,6 +9,15 @@ import br.com.caelum.carangobom.veiculo.model.Veiculo;
 
 public class VeiculoForm {
 
+	public VeiculoForm(){}
+	public VeiculoForm(Long id, Long marcaId, int ano, String modelo, BigDecimal valor) {
+		this.id = id;
+		this.marcaId = marcaId;
+		this.ano = ano;
+		this.modelo = modelo;
+		this.valor = valor;
+	}
+
 	private Long id;
 
 	@NotNull
