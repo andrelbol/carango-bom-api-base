@@ -40,16 +40,14 @@ public class VeiculoRestController {
     private VeiculoRepository veiculoRepository;
 
     private List<Veiculo> veiculos;
-    private String url;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
-        url = "http://localhost:8080";
         veiculos = List.of(
-                new Veiculo(1l, new Marca(1l, "VW"), 2021, "Gol", new BigDecimal("25000"))
+                new Veiculo(1L, new Marca(1L, "VW"), 2021, "Gol", new BigDecimal("25000"))
         );
-        uriBuilder = UriComponentsBuilder.fromUriString(url);
+        uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
     }
 
     @Test
@@ -64,7 +62,7 @@ public class VeiculoRestController {
 
     @Test
     void deveValidarFormatoDeEntradaNoCadastro() throws Exception {
-        Veiculo gol = new Veiculo(1l, new Marca(1l, "VW"), 2021, "Gol", new BigDecimal("25000"));
+        Veiculo gol = new Veiculo(1L, new Marca(1L, "VW"), 2021, "Gol", new BigDecimal("25000"));
         given(veiculoRepository.save(any())).willReturn(gol);
 
         this.mockMvc.perform(post("/veiculos")

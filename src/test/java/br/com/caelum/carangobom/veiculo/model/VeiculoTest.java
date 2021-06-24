@@ -17,9 +17,9 @@ class VeiculoTest {
 
     @BeforeEach
     public void setup(){
-        Marca marca = new Marca(1l, "VW");
-        veiculo1 = new Veiculo(1l, marca, 2021, "Gol", new BigDecimal("25000"));
-        veiculo2 = new Veiculo(1l, marca, 2021, "Gol", new BigDecimal("25000"));
+        Marca marca = new Marca(1L, "VW");
+        veiculo1 = new Veiculo(1L, marca, 2021, "Gol", new BigDecimal("25000"));
+        veiculo2 = new Veiculo(1L, marca, 2021, "Gol", new BigDecimal("25000"));
     }
 
     @Test
@@ -28,23 +28,8 @@ class VeiculoTest {
     }
 
     @Test
-    void deveGerarHashcodeIgual31QuandoIdNaoInformado() {
-        assertEquals(new Veiculo().hashCode(),31);
-    }
-
-    @Test
     void deveConsiderarIgualDoisVeiculosComDadoIdenticos() {
         assertTrue(veiculo1.equals(veiculo2));
-    }
-
-    @Test
-    void naoDeveRetornarVerdadeiroAoCampararVeiculoComUmObjetoNulo(){
-        assertFalse(veiculo1.equals(null));
-    }
-
-    @Test
-    void umObjetoSerIgualAEleMesmo(){
-        assertTrue(veiculo1.equals(veiculo1));
     }
 
     @Test
@@ -55,14 +40,8 @@ class VeiculoTest {
     @Test
     void naoDeveSerIgualQuandoIdDosVeiculosForemDiferentes(){
         Veiculo diferente = new Veiculo();
-        diferente.setId(2l);
+        diferente.setId(2L);
         assertFalse(veiculo1.equals(diferente));
     }
 
-    @Test
-    void naoDeveSerIgualQuandoIdDoVeiculoDaComparacaoEstiverNulo(){
-        Veiculo diferente = new Veiculo();
-        diferente.setId(2l);
-        assertFalse(new Veiculo().equals(diferente));
-    }
 }
