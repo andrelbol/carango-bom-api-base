@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(controllers = VeiculoController.class)
-public class VeiculoRestController {
+class VeiculoRestController {
     @Autowired
     private MockMvc mockMvc;
 
@@ -42,7 +42,7 @@ public class VeiculoRestController {
     private List<Veiculo> veiculos;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openMocks(this);
         veiculos = List.of(
                 new Veiculo(1L, new Marca(1L, "VW"), 2021, "Gol", new BigDecimal("25000"))

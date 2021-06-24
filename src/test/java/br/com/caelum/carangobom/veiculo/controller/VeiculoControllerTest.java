@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-public class VeiculoControllerTest {
+class VeiculoControllerTest {
 
     private List<Veiculo> veiculos;
     private List<VeiculoDto> veiculoDtos;
@@ -39,7 +39,7 @@ public class VeiculoControllerTest {
     private String url;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openMocks(this);
         url = "http://localhost:8080";
         veiculoController = new VeiculoController(veiculoRepository, marcaRepository);
@@ -49,13 +49,13 @@ public class VeiculoControllerTest {
     }
 
     @Test
-    public void deveListarTodosVeiculo() {
+    void deveListarTodosVeiculo() {
         when(veiculoRepository.findByOrderByModelo()).thenReturn(veiculos);
         assertEquals(veiculoController.listar(), veiculoDtos);
     }
 
     @Test
-    public void deveRetornarSomenteUmRegistroQuandoIdExistente() {
+    void deveRetornarSomenteUmRegistroQuandoIdExistente() {
         Veiculo veiculoSelecionado = veiculos.get(0);
 
         when(veiculoRepository.findById(1L)).thenReturn(Optional.of(veiculoSelecionado));
@@ -73,7 +73,7 @@ public class VeiculoControllerTest {
 
 
     @Test
-    public void deveRetornarNotFoundQuandoBuscarIdInexistente() {
+    void deveRetornarNotFoundQuandoBuscarIdInexistente() {
         Veiculo veiculoSelecionado = veiculos.get(0);
 
         when(veiculoRepository.findById(1L)).thenReturn(Optional.empty());
