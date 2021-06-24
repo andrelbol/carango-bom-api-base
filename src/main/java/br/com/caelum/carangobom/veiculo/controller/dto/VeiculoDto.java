@@ -11,16 +11,18 @@ public class VeiculoDto {
 
 	private Long id;
 	private String marca;
+	private Long marcaId;
 	private int ano;
 	private String modelo;
 	private BigDecimal valor;
 
-	public VeiculoDto(Long id, String marca, int ano, String modelo, BigDecimal valor) {
+	public VeiculoDto(Long id, String marca, Long marcaId, int ano, String modelo, BigDecimal valor) {
 		this.id = id;
 		this.marca = marca;
 		this.ano = ano;
 		this.modelo = modelo;
 		this.valor = valor;
+		this.marcaId = marcaId;
 	}
 
 	public Long getId() {
@@ -29,6 +31,10 @@ public class VeiculoDto {
 
 	public String getMarca() {
 		return marca;
+	}
+
+	public Long getMarcaId() {
+		return marcaId;
 	}
 
 	public void setMarca(String marca) {
@@ -48,8 +54,13 @@ public class VeiculoDto {
 	}
 
 	public static VeiculoDto parse(Veiculo veiculo) {
-		return new VeiculoDto(veiculo.getId(), veiculo.getMarca().getNome(), veiculo.getAno(), veiculo.getModelo(),
-				veiculo.getValor());
+		return new VeiculoDto(
+				veiculo.getId(),
+				veiculo.getMarca().getNome(),
+				veiculo.getMarca().getId(),
+				veiculo.getAno(), veiculo.getModelo(),
+				veiculo.getValor()
+		);
 	}
 
 	public static List<VeiculoDto> converter(List<Veiculo> veiculos) {

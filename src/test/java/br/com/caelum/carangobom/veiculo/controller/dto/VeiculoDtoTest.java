@@ -10,8 +10,8 @@ class VeiculoDtoTest {
 
     @Test
     void deveGerarHashcodeIgualParaDoisVeiculosComOsMesmosDados() {
-        VeiculoDto dto1 = new VeiculoDto(1l,"VW", 2021,"Gol", new BigDecimal("25000"));
-        VeiculoDto dto2 = new VeiculoDto(1l,"VW", 2021,"Gol", new BigDecimal("25000"));
+        VeiculoDto dto1 = new VeiculoDto(1L,"VW", 1L, 2021,"Gol", new BigDecimal("25000"));
+        VeiculoDto dto2 = new VeiculoDto(1L,"VW", 1L, 2021,"Gol", new BigDecimal("25000"));
 
         assertEquals(dto1.hashCode(),dto2.hashCode());
     }

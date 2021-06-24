@@ -1,7 +1,5 @@
 package br.com.caelum.carangobom.veiculo.controller;
 
-import br.com.caelum.carangobom.marca.controller.dto.MarcaDto;
-import br.com.caelum.carangobom.marca.controller.form.MarcaForm;
 import br.com.caelum.carangobom.marca.model.Marca;
 import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 import br.com.caelum.carangobom.veiculo.controller.dto.VeiculoDto;
@@ -41,24 +39,24 @@ public class VeiculoControllerTest {
     private String url;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         openMocks(this);
         url = "http://localhost:8080";
         veiculoController = new VeiculoController(veiculoRepository, marcaRepository);
-        veiculos = List.of(new Veiculo(1L, new Marca(1L, "Fiat"), 2021, "Uno",new BigDecimal("4500.0")));
+        veiculos = List.of(new Veiculo(1L, new Marca(1L, "Fiat"), 2021, "Uno", new BigDecimal("4500.0")));
         veiculoDtos = VeiculoDto.converter(veiculos);
         uriBuilder = UriComponentsBuilder.fromUriString(url);
     }
 
     @Test
-    public void deveListarTodosVeiculo(){
+    public void deveListarTodosVeiculo() {
         when(veiculoRepository.findByOrderByModelo()).thenReturn(veiculos);
         assertEquals(veiculoController.listar(), veiculoDtos);
     }
 
     @Test
-    public void deveRetornarSomenteUmRegistroQuandoIdExistente(){
-        var veiculoSelecionado = veiculos.get(0);
+    public void deveRetornarSomenteUmRegistroQuandoIdExistente() {
+        Veiculo veiculoSelecionado = veiculos.get(0);
 
         when(veiculoRepository.findById(1L)).thenReturn(Optional.of(veiculoSelecionado));
 
@@ -75,8 +73,8 @@ public class VeiculoControllerTest {
 
 
     @Test
-    public void deveRetornarNotFoundQuandoBuscarIdInexistente(){
-        var veiculoSelecionado = veiculos.get(0);
+    public void deveRetornarNotFoundQuandoBuscarIdInexistente() {
+        Veiculo veiculoSelecionado = veiculos.get(0);
 
         when(veiculoRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -87,7 +85,7 @@ public class VeiculoControllerTest {
     @Test
     void deveRetornarNotFoundQuandoTentarCadastrarVeiculoComMarcaIdInesxistente() {
         when(marcaRepository.findById(anyLong())).thenReturn(Optional.empty());
-        VeiculoForm novoCadastro = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
+        VeiculoForm novoCadastro = new VeiculoForm(1l, 2021, "Gol", new BigDecimal("10000.0"));
         ResponseEntity<VeiculoDto> resposta = veiculoController.cadastrar(novoCadastro, uriBuilder);
         assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
     }
@@ -95,9 +93,9 @@ public class VeiculoControllerTest {
     @Test
     void deveResponderCreatedELocationQuandoCadastrarNovoVeiculo() {
         long idNovoVeiculo = 1;
-        var marca = new Marca(1l, "VW");
+        Marca marca = new Marca(1l, "VW");
 
-        VeiculoForm novoCadastro = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
+        VeiculoForm novoCadastro = new VeiculoForm(1l, 2021, "Gol", new BigDecimal("10000.0"));
 
         when(veiculoRepository.save(novoCadastro.converter(marca)))
                 .then(invocation -> {
@@ -125,7 +123,7 @@ public class VeiculoControllerTest {
 
         Veiculo veiculoAntesDaAlteracao = new Veiculo(1l, marca, 2021, "Gol", new BigDecimal("10000.0"));
 
-        VeiculoForm veiculoForm = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
+        VeiculoForm veiculoForm = new VeiculoForm(1l, 2021, "Gol Alterado", new BigDecimal("10000.0"));
 
         when(marcaRepository.findById(1L)).thenReturn(Optional.of(marca));
 
@@ -139,7 +137,6 @@ public class VeiculoControllerTest {
         assertEquals(veiculoForm.getModelo(), veiculoAlterado.getModelo());
         assertEquals(marca.getNome(), veiculoAlterado.getMarca());
         assertEquals(veiculoForm.getAno(), veiculoAlterado.getAno());
-        assertEquals(veiculoForm.getId(), veiculoAlterado.getId());
         assertEquals(veiculoForm.getValor(), veiculoAlterado.getValor());
     }
 

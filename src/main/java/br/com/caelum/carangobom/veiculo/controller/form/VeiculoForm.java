@@ -10,15 +10,12 @@ import br.com.caelum.carangobom.veiculo.model.Veiculo;
 public class VeiculoForm {
 
 	public VeiculoForm(){}
-	public VeiculoForm(Long id, Long marcaId, int ano, String modelo, BigDecimal valor) {
-		this.id = id;
+	public VeiculoForm(Long marcaId, int ano, String modelo, BigDecimal valor) {
 		this.marcaId = marcaId;
 		this.ano = ano;
 		this.modelo = modelo;
 		this.valor = valor;
 	}
-
-	private Long id;
 
 	@NotNull
 	private Long marcaId;
@@ -32,14 +29,6 @@ public class VeiculoForm {
 	@NotNull
 	private BigDecimal valor;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getMarcaId() {
 		return marcaId;
 	}
@@ -52,24 +41,12 @@ public class VeiculoForm {
 		return ano;
 	}
 
-	public void setAno(int ano) {
-		this.ano = ano;
-	}
-
 	public String getModelo() {
 		return modelo;
 	}
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
-
 	public BigDecimal getValor() {
 		return valor;
-	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
 	}
 
 	public Veiculo converter(Marca marca) {
