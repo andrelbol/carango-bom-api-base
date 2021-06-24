@@ -95,11 +95,7 @@ public class Veiculo {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ano;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((marca == null) ? 0 : marca.hashCode());
-		result = prime * result + ((modelo == null) ? 0 : modelo.hashCode());
-		result = prime * result + ((valor == null) ? 0 : valor.hashCode());
 		return result;
 	}
 
@@ -112,27 +108,10 @@ public class Veiculo {
 		if (getClass() != obj.getClass())
 			return false;
 		Veiculo other = (Veiculo) obj;
-		if (ano != other.ano)
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (marca == null) {
-			if (other.marca != null)
-				return false;
-		} else if (!marca.equals(other.marca))
-			return false;
-		if (modelo == null) {
-			if (other.modelo != null)
-				return false;
-		} else if (!modelo.equals(other.modelo))
-			return false;
-		if (valor == null) {
-			if (other.valor != null)
-				return false;
-		} else if (!valor.equals(other.valor))
 			return false;
 		return true;
 	}

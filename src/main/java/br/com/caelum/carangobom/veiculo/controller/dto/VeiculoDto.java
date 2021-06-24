@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.veiculo.controller.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import br.com.caelum.carangobom.veiculo.model.Veiculo;
@@ -26,10 +27,6 @@ public class VeiculoDto {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getMarca() {
 		return marca;
 	}
@@ -42,24 +39,12 @@ public class VeiculoDto {
 		return ano;
 	}
 
-	public void setAno(int ano) {
-		this.ano = ano;
-	}
-
 	public String getModelo() {
 		return modelo;
 	}
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
-
 	public BigDecimal getValor() {
 		return valor;
-	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
 	}
 
 	public static VeiculoDto parse(Veiculo veiculo) {
@@ -78,20 +63,12 @@ public class VeiculoDto {
 
 		VeiculoDto that = (VeiculoDto) o;
 
-		if (ano != that.ano) return false;
 		if (!id.equals(that.id)) return false;
-		if (!marca.equals(that.marca)) return false;
-		if (!modelo.equals(that.modelo)) return false;
 		return valor.equals(that.valor);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id.hashCode();
-		result = 31 * result + marca.hashCode();
-		result = 31 * result + ano;
-		result = 31 * result + modelo.hashCode();
-		result = 31 * result + valor.hashCode();
-		return result;
+		return Objects.hash(marca.hashCode(),ano,modelo, valor, id);
 	}
 }

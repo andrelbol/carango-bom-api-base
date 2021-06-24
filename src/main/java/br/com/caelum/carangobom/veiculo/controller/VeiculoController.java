@@ -36,19 +36,21 @@ public class VeiculoController {
 	@GetMapping
 	public List<VeiculoDto> listar() {
 		return VeiculoDto.converter(veiculoRepository.findByOrderByModelo());
-
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<VeiculoDto> listarPorId(@PathVariable Long id) {
 		Optional<Veiculo> veiculoEncontrada = veiculoRepository.findById(id);
-		return veiculoEncontrada.map(veiculo -> ResponseEntity.ok(VeiculoDto.parse(veiculo)))
+
+		return veiculoEncontrada
+				.map(veiculo -> ResponseEntity.ok(VeiculoDto.parse(veiculo)))
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<VeiculoDto> cadastrar(@Valid @RequestBody VeiculoForm veiculoForm,
+	public ResponseEntity<VeiculoDto> cadastrar(
+			@Valid @RequestBody VeiculoForm veiculoForm,
 			UriComponentsBuilder uriBuilder) {
 		Optional<Marca> marca = marcaRepository.findById(veiculoForm.getMarcaId());
 
@@ -58,6 +60,7 @@ public class VeiculoController {
 
 		Veiculo veiculoCadastrado = veiculoRepository.save(veiculoForm.converter(marca.get()));
 		URI h = uriBuilder.path("/veiculos/{id}").buildAndExpand(veiculoCadastrado.getId()).toUri();
+
 		return ResponseEntity.created(h).body(VeiculoDto.parse(veiculoCadastrado));
 	}
 
@@ -74,9 +77,9 @@ public class VeiculoController {
 		if (veiculoAtual.isPresent()) {
 			Veiculo veiculoAlterada = veiculoForm.atualizar(veiculoAtual.get(), marca.get());
 			return ResponseEntity.ok(VeiculoDto.parse(veiculoAlterada));
-		} else {
-			return ResponseEntity.notFound().build();
 		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@DeleteMapping("/{id}")

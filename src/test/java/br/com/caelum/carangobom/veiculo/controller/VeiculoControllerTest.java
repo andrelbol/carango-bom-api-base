@@ -57,7 +57,7 @@ public class VeiculoControllerTest {
     }
 
     @Test
-    public void deveRetornarSomenteUmRegistro(){
+    public void deveRetornarSomenteUmRegistroQuandoIdExistente(){
         var veiculoSelecionado = veiculos.get(0);
 
         when(veiculoRepository.findById(1L)).thenReturn(Optional.of(veiculoSelecionado));
@@ -73,11 +73,22 @@ public class VeiculoControllerTest {
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
     }
 
+
     @Test
-    void deveRetornarNotFoundQuandoTentarRecuperarVeiculoComIdInexistente() {
-        when(veiculoRepository.findById(anyLong())).thenReturn(Optional.empty());
+    public void deveRetornarNotFoundQuandoBuscarIdInexistente(){
+        var veiculoSelecionado = veiculos.get(0);
+
+        when(veiculoRepository.findById(1L)).thenReturn(Optional.empty());
 
         ResponseEntity<VeiculoDto> resposta = veiculoController.listarPorId(1L);
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+    }
+
+    @Test
+    void deveRetornarNotFoundQuandoTentarCadastrarVeiculoComMarcaIdInesxistente() {
+        when(marcaRepository.findById(anyLong())).thenReturn(Optional.empty());
+        VeiculoForm novoCadastro = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
+        ResponseEntity<VeiculoDto> resposta = veiculoController.cadastrar(novoCadastro, uriBuilder);
         assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
     }
 
@@ -86,9 +97,7 @@ public class VeiculoControllerTest {
         long idNovoVeiculo = 1;
         var marca = new Marca(1l, "VW");
 
-        VeiculoForm novoCadastro = new VeiculoForm(
-                1l, 1l, 2021, "Gol", new BigDecimal("10000.0")
-        );
+        VeiculoForm novoCadastro = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
 
         when(veiculoRepository.save(novoCadastro.converter(marca)))
                 .then(invocation -> {
@@ -109,17 +118,14 @@ public class VeiculoControllerTest {
         assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
         assertEquals(url + "/veiculos/" + idNovoVeiculo, resposta.getHeaders().getLocation().toString());
     }
+
     @Test
     void deveAlterarNomeQuandoVeiculoExistir() {
         Marca marca = new Marca(1L, "VW");
 
-        Veiculo veiculoAntesDaAlteracao = new Veiculo(
-                1l, marca, 2021, "Gol", new BigDecimal("10000.0")
-        );
+        Veiculo veiculoAntesDaAlteracao = new Veiculo(1l, marca, 2021, "Gol", new BigDecimal("10000.0"));
 
-        VeiculoForm veiculoForm = new VeiculoForm(
-                1l, 1l, 2021, "Gol", new BigDecimal("10000.0")
-        );
+        VeiculoForm veiculoForm = new VeiculoForm(1l, 1l, 2021, "Gol", new BigDecimal("10000.0"));
 
         when(marcaRepository.findById(1L)).thenReturn(Optional.of(marca));
 
@@ -138,14 +144,25 @@ public class VeiculoControllerTest {
     }
 
     @Test
-    void naoDeveAlterarVeiculoInexistente() {
-        when(veiculoRepository.findById(anyLong())).thenReturn(Optional.empty());
+    void naoDeveAlterarVeiculoQuandoInformadaUmaMarcaInexistente() {
+        when(marcaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         VeiculoForm veiculoForm = new VeiculoForm();
         ResponseEntity<VeiculoDto> resposta = veiculoController.alterar(1L, veiculoForm);
         assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
     }
 
+    @Test
+    void naoDeveAlterarVeiculoInexistente() {
+        VeiculoForm veiculoForm = new VeiculoForm();
+        veiculoForm.setMarcaId(1l);
+
+        when(marcaRepository.findById(anyLong())).thenReturn(Optional.of(new Marca(1l, "VW")));
+        when(veiculoRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        ResponseEntity<VeiculoDto> resposta = veiculoController.alterar(1L, veiculoForm);
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+    }
 
     @Test
     void deveDeletarVeiculoExistente() {
@@ -161,8 +178,6 @@ public class VeiculoControllerTest {
 
     @Test
     void deveRetornarNotFoundAoTentarExcluirVeiculoInexistente() {
-        Veiculo veiculo = new Veiculo();
-
         when(veiculoRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         ResponseEntity<Marca> resposta = veiculoController.deletar(1l);
