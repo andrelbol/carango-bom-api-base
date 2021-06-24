@@ -177,7 +177,7 @@ class VeiculoControllerTest {
     void deveRetornarNotFoundAoTentarExcluirVeiculoInexistente() {
         when(veiculoRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        ResponseEntity<Marca> resposta = veiculoController.deletar(1l);
+        ResponseEntity<Veiculo> resposta = veiculoController.deletar(1l);
         assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
 
         verify(veiculoRepository, never()).deleteById(any());
