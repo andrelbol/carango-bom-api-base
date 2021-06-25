@@ -136,6 +136,7 @@ class MarcaControllerTest {
 
         ResponseEntity<Marca> resposta = marcaController.deleta(1L);
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
+
         verify(marcaRepository).deleteById(audi.getId());
     }
 
