@@ -24,7 +24,6 @@ import br.com.caelum.carangobom.usuario.controller.form.AlterarSenhaForm;
 import br.com.caelum.carangobom.usuario.controller.form.UsuarioForm;
 import br.com.caelum.carangobom.usuario.model.Usuario;
 import br.com.caelum.carangobom.usuario.repository.UsuarioRepository;
-import br.com.caelum.carangobom.usuario.service.CriptografiaService;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -79,7 +78,7 @@ public class UsuarioController {
         	return ResponseEntity.notFound().build();
         }   
         
-        if(!CriptografiaService.compararSenhas(alterarSenhaForm.getSenhaAnterior(), usuarioAtual.get().getSenha())) {
+        if(!usuarioAtual.get().validarSenha(alterarSenhaForm.getSenhaAnterior())) {
         	return ResponseEntity.badRequest().build();
     	}
     	

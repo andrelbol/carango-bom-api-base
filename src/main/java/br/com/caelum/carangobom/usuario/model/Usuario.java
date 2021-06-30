@@ -11,16 +11,22 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Entity
 public class Usuario {
 
 	public Usuario() {}
-
+	
+	public Usuario(String nome, String senha, String email) {
+		this(null, nome, senha, email);		
+	}
+	
     public Usuario(Long id, String nome, String senha, String email) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.senha = senha;
+		this.senha = criptografarSenha(senha);
 		this.email = email;
 	}
 
@@ -60,7 +66,7 @@ public class Usuario {
 	}
 
 	public void setSenha(String senha) {
-		this.senha = senha;
+		this.senha = criptografarSenha(senha);
 	}
 	
 	
@@ -92,5 +98,13 @@ public class Usuario {
         		&& Objects.equals(nome, usuario.nome) 
         		&& Objects.equals(senha, usuario.senha)
         		&& Objects.equals(email, usuario.email);
-	}   
+	}
+	
+	public boolean validarSenha(String senha) {
+		return new BCryptPasswordEncoder().matches(senha, this.senha);
+	}
+	
+	private String criptografarSenha(String senha) {
+		return new BCryptPasswordEncoder().encode(senha);
+	}
 }

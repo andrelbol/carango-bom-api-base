@@ -5,21 +5,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.com.caelum.carangobom.usuario.model.Usuario;
-import br.com.caelum.carangobom.usuario.service.CriptografiaService;
 
 public class UsuarioForm {
 	
 	public UsuarioForm() {}
 	
-	public UsuarioForm(Long id, String nome, String senha, String email) {
-		super();
-		this.id = id;
+	public UsuarioForm(String nome, String senha, String email) {
 		this.nome = nome;
 		this.senha = senha;
 		this.email = email;
 	}
-
-	private Long id;
 	
 	@NotBlank
 	private String nome;
@@ -31,14 +26,6 @@ public class UsuarioForm {
 	@NotBlank
 	@Email
 	private String email;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getNome() {
 		return nome;
@@ -65,7 +52,7 @@ public class UsuarioForm {
 	}
 
 	public Usuario converter() {
-		return new Usuario(id, nome, CriptografiaService.criptografarSenha(senha), email);
+		return new Usuario(nome, senha, email);
 	}
 
 	public Usuario atualizar(Usuario usuario) {

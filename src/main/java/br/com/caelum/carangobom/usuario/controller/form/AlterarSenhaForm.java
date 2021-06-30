@@ -3,8 +3,6 @@ package br.com.caelum.carangobom.usuario.controller.form;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import br.com.caelum.carangobom.usuario.model.Usuario;
 
 public class AlterarSenhaForm {
@@ -41,7 +39,7 @@ public class AlterarSenhaForm {
 	}
 	
 	public Usuario atualizarSenha(Usuario usuario) {
-		usuario.setSenha(new BCryptPasswordEncoder().encode(novaSenha));
+		usuario.setSenha(novaSenha);
 		
 		return usuario;
 	}
