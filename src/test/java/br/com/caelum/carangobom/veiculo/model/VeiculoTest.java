@@ -29,19 +29,19 @@ class VeiculoTest {
 
     @Test
     void deveConsiderarIgualDoisVeiculosComDadoIdenticos() {
-        assertTrue(veiculo1.equals(veiculo2));
+        assertEquals(veiculo1, veiculo2);
     }
 
     @Test
     void naoDeveSerIgualQuandoComparadoAOutroObjeto(){
-        assertFalse(veiculo1.equals(new Object()));
+        assertNotEquals(veiculo1, new Object());
     }
 
     @Test
     void naoDeveSerIgualQuandoIdDosVeiculosForemDiferentes(){
         Veiculo diferente = new Veiculo();
         diferente.setId(2L);
-        assertFalse(veiculo1.equals(diferente));
+        assertNotEquals(veiculo1, diferente);
     }
 
 }
