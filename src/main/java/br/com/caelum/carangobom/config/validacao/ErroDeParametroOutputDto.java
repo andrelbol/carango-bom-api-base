@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.validacao;
+package br.com.caelum.carangobom.config.validacao;
 
 public class ErroDeParametroOutputDto {
 

@@ -1,8 +1,5 @@
 package br.com.caelum.carangobom.usuario.controller;
 
-import br.com.caelum.carangobom.marca.model.Marca;
-import br.com.caelum.carangobom.marca.repository.MarcaRepository;
-import br.com.caelum.carangobom.usuario.controller.dto.UsuarioDto;
 import br.com.caelum.carangobom.usuario.model.Usuario;
 import br.com.caelum.carangobom.usuario.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UsuarioController.class)
-public class UsuarioRestControllerTest {
+class UsuarioRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,18 +35,12 @@ public class UsuarioRestControllerTest {
     private UsuarioRepository usuarioRepository;
 
     private List<Usuario> usuarios;
-    private PasswordEncoder passwordEncoder;
-    private UsuarioController usuarioController;
-    private List<UsuarioDto> usuariosDto;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
         String url = "http://localhost:8080";
-        passwordEncoder = new BCryptPasswordEncoder();
-        usuarioController = new UsuarioController(usuarioRepository, passwordEncoder);
         usuarios = List.of(new Usuario(1L, "Teste", "123456", "teste@teste.com"));
-        usuariosDto = UsuarioDto.converter(usuarios);
         uriBuilder = UriComponentsBuilder.fromUriString(url);
     }
 

@@ -23,19 +23,19 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-public class UsuarioControllerTest {
-	
-	private List<Usuario> usuarios;
-	private List<UsuarioDto> usuariosDto;
-	private UsuarioController usuarioController;
-	private UriComponentsBuilder uriBuilder;
-	private PasswordEncoder passwordEncoder;
-	private String url;
-	
-	@Mock
-	private UsuarioRepository usuarioRepository;
-	
-	@BeforeEach
+class UsuarioControllerTest {
+
+    private List<Usuario> usuarios;
+    private List<UsuarioDto> usuariosDto;
+    private UsuarioController usuarioController;
+    private UriComponentsBuilder uriBuilder;
+    private PasswordEncoder passwordEncoder;
+    private String url;
+
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
+    @BeforeEach
     void setup() {
         openMocks(this);
         url = "http://localhost:8080";
@@ -45,154 +45,154 @@ public class UsuarioControllerTest {
         usuariosDto = UsuarioDto.converter(usuarios);
         uriBuilder = UriComponentsBuilder.fromUriString(url);
     }
-	
-	@Test
-	void deveListarTodosUsuarios() {
-		when(usuarioRepository.findAll()).thenReturn(usuarios);
-		assertEquals(usuarioController.listar(), usuariosDto);
-	}
 
-	@Test
-	void deveListarUsuarioPorId() {
-		Usuario usuarioSelecionado = usuarios.get(0);
+    @Test
+    void deveListarTodosUsuarios() {
+        when(usuarioRepository.findAll()).thenReturn(usuarios);
+        assertEquals(usuarioController.listar(), usuariosDto);
+    }
 
-		when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioSelecionado));
+    @Test
+    void deveListarUsuarioPorId() {
+        Usuario usuarioSelecionado = usuarios.get(0);
 
-		ResponseEntity<UsuarioDto> resposta = usuarioController.buscarPorId(1L);
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioSelecionado));
 
-		UsuarioDto usuarioRetornado = resposta.getBody();
+        ResponseEntity<UsuarioDto> resposta = usuarioController.buscarPorId(1L);
 
-		assertEquals(usuarioSelecionado.getId(), usuarioRetornado.getId());
-		assertEquals(usuarioSelecionado.getNome(), usuarioRetornado.getNome());
-		assertEquals(usuarioSelecionado.getEmail(), usuarioRetornado.getEmail());
-		assertEquals(resposta.getStatusCode(), HttpStatus.OK);
-	}
+        UsuarioDto usuarioRetornado = resposta.getBody();
 
-	@Test
-	void deveRetornarNotFoundQuandoBuscarIdInexistente() {
-		when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
-		ResponseEntity<UsuarioDto> resposta = usuarioController.buscarPorId(1L);
+        assertEquals(usuarioSelecionado.getId(), usuarioRetornado.getId());
+        assertEquals(usuarioSelecionado.getNome(), usuarioRetornado.getNome());
+        assertEquals(usuarioSelecionado.getEmail(), usuarioRetornado.getEmail());
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+    }
 
-		assertEquals(resposta.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
+    @Test
+    void deveRetornarNotFoundQuandoBuscarIdInexistente() {
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
+        ResponseEntity<UsuarioDto> resposta = usuarioController.buscarPorId(1L);
 
-	@Test
-	void deveResponderCreatedELocationQuandoCadastrarNovoUsuario() {
-		long idNovoUsuario = 1L;
-		
-		UsuarioForm usuarioForm = new UsuarioForm("LUANA", "123456", "teste@teste.com");
-		
-		when(usuarioRepository.save(any(Usuario.class)))
-        .then(invocation -> {
-            Usuario usuarioSalvo = invocation.getArgument(0, Usuario.class);
-			System.out.println(usuarioSalvo);
-            usuarioSalvo.setId(idNovoUsuario);
-            return usuarioSalvo;
-        });
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+    }
 
-		ResponseEntity<UsuarioDto> resposta = usuarioController.cadastrar(usuarioForm, uriBuilder);
-		
-		UsuarioDto usuarioRetornado = resposta.getBody();
-		
-		assertEquals(usuarioForm.getNome(), usuarioRetornado.getNome());
-		assertEquals(usuarioForm.getEmail(), usuarioRetornado.getEmail());
-		assertEquals(resposta.getStatusCode(), HttpStatus.CREATED);
+    @Test
+    void deveResponderCreatedELocationQuandoCadastrarNovoUsuario() {
+        long idNovoUsuario = 1L;
+
+        UsuarioForm usuarioForm = new UsuarioForm("LUANA", "123456", "teste@teste.com");
+
+        when(usuarioRepository.save(any(Usuario.class)))
+                .then(invocation -> {
+                    Usuario usuarioSalvo = invocation.getArgument(0, Usuario.class);
+                    System.out.println(usuarioSalvo);
+                    usuarioSalvo.setId(idNovoUsuario);
+                    return usuarioSalvo;
+                });
+
+        ResponseEntity<UsuarioDto> resposta = usuarioController.cadastrar(usuarioForm, uriBuilder);
+
+        UsuarioDto usuarioRetornado = resposta.getBody();
+
+        assertEquals(usuarioForm.getNome(), usuarioRetornado.getNome());
+        assertEquals(usuarioForm.getEmail(), usuarioRetornado.getEmail());
+        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
         assertEquals(url + "/usuarios/" + idNovoUsuario, resposta.getHeaders().getLocation().toString());
-	}
+    }
 
-	@Test
-	void deveAlterarNomeQuandoUsuarioExistir() {
-		Usuario usuario = usuarios.get(0);
+    @Test
+    void deveAlterarNomeQuandoUsuarioExistir() {
+        Usuario usuario = usuarios.get(0);
 
-		when(usuarioRepository.findById(1L))
-				.thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.of(usuario));
 
-		when(usuarioRepository.getOne(1L))
-				.thenReturn(usuario);
+        when(usuarioRepository.getOne(1L))
+                .thenReturn(usuario);
 
-		UsuarioForm usuarioForm = new UsuarioForm();
-		usuarioForm.setNome("Novo usuário");
-		ResponseEntity<UsuarioDto> resposta = usuarioController.alterar(1L, usuarioForm);
-		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+        UsuarioForm usuarioForm = new UsuarioForm();
+        usuarioForm.setNome("Novo usuário");
+        ResponseEntity<UsuarioDto> resposta = usuarioController.alterar(1L, usuarioForm);
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
 
-		UsuarioDto usuarioAlterado = resposta.getBody();
-		assertEquals("Novo usuário", usuarioAlterado.getNome());
-	}
+        UsuarioDto usuarioAlterado = resposta.getBody();
+        assertEquals("Novo usuário", usuarioAlterado.getNome());
+    }
 
-	@Test
-	void naoDeveAlterarUsuarioInexistente() {
-		when(usuarioRepository.findById(anyLong()))
-				.thenReturn(Optional.empty());
+    @Test
+    void naoDeveAlterarUsuarioInexistente() {
+        when(usuarioRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
 
-		UsuarioForm marcaForm = new UsuarioForm();
-		marcaForm.setNome("Novo usuário");
-		ResponseEntity<UsuarioDto> resposta = usuarioController.alterar(1L, marcaForm);
-		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
-	}
+        UsuarioForm marcaForm = new UsuarioForm();
+        marcaForm.setNome("Novo usuário");
+        ResponseEntity<UsuarioDto> resposta = usuarioController.alterar(1L, marcaForm);
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+    }
 
-	@Test
-	void deveDeletarUsuarioExistente() {
-		Usuario usuario = usuarios.get(0);
+    @Test
+    void deveDeletarUsuarioExistente() {
+        Usuario usuario = usuarios.get(0);
 
-		when(usuarioRepository.findById(1L))
-				.thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.of(usuario));
 
-		ResponseEntity<Usuario> resposta = usuarioController.deletar(1L);
-		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+        ResponseEntity<Usuario> resposta = usuarioController.deletar(1L);
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
 
-		verify(usuarioRepository).deleteById(usuario.getId());
-	}
+        verify(usuarioRepository).deleteById(usuario.getId());
+    }
 
-	@Test
-	void naoDeveDeletarUsuarioInexistente() {
-		Usuario usuario = new Usuario();
-		usuario.setId(1L);
-		when(usuarioRepository.findById(anyLong()))
-				.thenReturn(Optional.empty());
+    @Test
+    void naoDeveDeletarUsuarioInexistente() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        when(usuarioRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
 
-		ResponseEntity<Usuario> resposta = usuarioController.deletar(usuario.getId());
-		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+        ResponseEntity<Usuario> resposta = usuarioController.deletar(usuario.getId());
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
 
-		verify(usuarioRepository, never()).deleteById(any());
-	}
+        verify(usuarioRepository, never()).deleteById(any());
+    }
 
-	@Test
-	void deveAlterarSenhaQuandoUsuarioExistirESenhaAnteriorForIgualSenhaCadastrada(){
-		long idUsuario = 1L;
-		Usuario usuario = new Usuario(idUsuario,"Teste", passwordEncoder.encode("123456"), "teste@teste.com");
+    @Test
+    void deveAlterarSenhaQuandoUsuarioExistirESenhaAnteriorForIgualSenhaCadastrada() {
+        long idUsuario = 1L;
+        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123456"), "teste@teste.com");
 
-		when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
 
-		AlterarSenhaForm form = new AlterarSenhaForm("010203","123456");
+        AlterarSenhaForm form = new AlterarSenhaForm("010203", "123456");
 
-		ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(idUsuario, form);
+        ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(idUsuario, form);
 
-		assertEquals(HttpStatus.OK, resposta.getStatusCode());
-	}
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+    }
 
-	@Test
-	void naoDeveAlterarSenhaQuandoUsuarioNaoExistir(){
+    @Test
+    void naoDeveAlterarSenhaQuandoUsuarioNaoExistir() {
 
-		when(usuarioRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-		AlterarSenhaForm form = new AlterarSenhaForm("010203","123456");
+        AlterarSenhaForm form = new AlterarSenhaForm("010203", "123456");
 
-		ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(1L, form);
+        ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(1L, form);
 
-		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
-	}
+        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+    }
 
-	@Test
-	void naoDeveAlterarSenhaQuandoASenhaAnteriorInformadaNaoForIgualASenhaCadastradaParaUsuario(){
-		long idUsuario = 1L;
-		Usuario usuario = new Usuario(idUsuario,"Teste", passwordEncoder.encode("123457"), "teste@teste.com");
+    @Test
+    void naoDeveAlterarSenhaQuandoASenhaAnteriorInformadaNaoForIgualASenhaCadastradaParaUsuario() {
+        long idUsuario = 1L;
+        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123457"), "teste@teste.com");
 
-		when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
 
-		AlterarSenhaForm form = new AlterarSenhaForm("010203","123456");
+        AlterarSenhaForm form = new AlterarSenhaForm("010203", "123456");
 
-		ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(idUsuario, form);
+        ResponseEntity<UsuarioDto> resposta = usuarioController.alterarSenha(idUsuario, form);
 
-		assertEquals(HttpStatus.BAD_REQUEST, resposta.getStatusCode());
-	}
+        assertEquals(HttpStatus.BAD_REQUEST, resposta.getStatusCode());
+    }
 }

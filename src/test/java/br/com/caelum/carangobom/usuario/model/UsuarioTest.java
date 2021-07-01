@@ -13,9 +13,9 @@ class UsuarioTest {
     private Usuario usuario2;
 
     @BeforeEach
-    public void setup(){
-        usuario2 = new Usuario(1L, "Teste","teste@teste.com", "");
-        usuario1 = new Usuario(1L, "Teste","teste@teste.com", "");
+    public void setup() {
+        usuario2 = new Usuario(1L, "Teste", "teste@teste.com", "");
+        usuario1 = new Usuario(1L, "Teste", "teste@teste.com", "");
     }
 
     @Test
@@ -25,17 +25,18 @@ class UsuarioTest {
 
     @Test
     void deveConsiderarIgualQuandoUsuarioForComparadoComEleMesmo() {
-        assertEquals(usuario2, usuario2);
+        var usuarioIgual = usuario2;
+        assertEquals(usuarioIgual, usuario2);
     }
 
     @Test
-    void naoDeveSerIgualQuandoComparadoAOutroObjeto(){
-        assertNotEquals(usuario2,new Object());
+    void naoDeveSerIgualQuandoComparadoAOutroObjeto() {
+        assertNotEquals(new Object(), usuario2);
     }
 
     @Test
-    void naoDeveSerIgualQuandoQualquerEntreOsUsuariosForemDiferentes(){
-        Usuario diferente = new Usuario(2L, "Teste","teste@teste.com", "");;
-        assertNotEquals(usuario2,diferente);
+    void naoDeveSerIgualQuandoQualquerEntreOsUsuariosForemDiferentes() {
+        Usuario diferente = new Usuario(2L, "Teste", "teste@teste.com", "");
+        assertNotEquals(diferente, usuario2);
     }
 }
