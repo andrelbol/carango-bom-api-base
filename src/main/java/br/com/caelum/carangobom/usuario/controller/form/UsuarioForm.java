@@ -1,6 +1,5 @@
 package br.com.caelum.carangobom.usuario.controller.form;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -11,10 +10,9 @@ public class UsuarioForm {
 	
 	public UsuarioForm() {}
 	
-	public UsuarioForm(String nome, String senha, String email) {
+	public UsuarioForm(String nome, String senha) {
 		this.nome = nome;
 		this.senha = senha;
-		this.email = email;
 	}
 	
 	@NotBlank
@@ -23,10 +21,6 @@ public class UsuarioForm {
 	@NotBlank
 	@Size(min = 6, message = "Deve ter {min} ou mais caracteres.")
 	private String senha;
-	
-	@NotBlank
-	@Email
-	private String email;
 
 	public String getNome() {
 		return nome;
@@ -44,22 +38,13 @@ public class UsuarioForm {
 		this.senha = senha;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public Usuario converter(PasswordEncoder passwordEncoder) {
-		return new Usuario(nome, passwordEncoder.encode(senha), email);
+		return new Usuario(nome, passwordEncoder.encode(senha));
 	}
 
 	public Usuario atualizar(Usuario usuario) {
 		usuario.setNome(nome);
-		usuario.setEmail(email);
-		
+
 		return usuario;
 	}
 

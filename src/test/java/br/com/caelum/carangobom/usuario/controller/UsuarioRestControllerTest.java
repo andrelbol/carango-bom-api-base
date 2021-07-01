@@ -40,7 +40,7 @@ class UsuarioRestControllerTest {
     public void setup() {
         openMocks(this);
         String url = "http://localhost:8080";
-        usuarios = List.of(new Usuario(1L, "Teste", "123456", "teste@teste.com"));
+        usuarios = List.of(new Usuario(1L, "Teste", "123456"));
         uriBuilder = UriComponentsBuilder.fromUriString(url);
     }
 

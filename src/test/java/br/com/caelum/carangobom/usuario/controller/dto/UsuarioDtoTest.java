@@ -8,8 +8,8 @@ class UsuarioDtoTest {
 
     @Test
     void deveGerarHashCodesIguaisDoisObjetosComOsMesmosDados() {
-        UsuarioDto usuario1 = new UsuarioDto(1L, "Teste", "teste@teste.com");
-        UsuarioDto usuario2 = new UsuarioDto(1L, "Teste", "teste@teste.com");
+        UsuarioDto usuario1 = new UsuarioDto(1L, "Teste");
+        UsuarioDto usuario2 = new UsuarioDto(1L, "Teste");
 
         assertEquals(usuario1.hashCode(),usuario2.hashCode());
     }

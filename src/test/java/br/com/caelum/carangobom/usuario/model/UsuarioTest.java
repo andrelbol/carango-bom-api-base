@@ -14,8 +14,8 @@ class UsuarioTest {
 
     @BeforeEach
     public void setup() {
-        usuario2 = new Usuario(1L, "Teste", "teste@teste.com", "");
-        usuario1 = new Usuario(1L, "Teste", "teste@teste.com", "");
+        usuario2 = new Usuario(1L, "Teste", "teste@teste.com");
+        usuario1 = new Usuario(1L, "Teste", "teste@teste.com");
     }
 
     @Test
@@ -36,7 +36,7 @@ class UsuarioTest {
 
     @Test
     void naoDeveSerIgualQuandoQualquerEntreOsUsuariosForemDiferentes() {
-        Usuario diferente = new Usuario(2L, "Teste", "teste@teste.com", "");
+        Usuario diferente = new Usuario(2L, "Teste", "teste@teste.com");
         assertNotEquals(diferente, usuario2);
     }
 }

@@ -41,7 +41,7 @@ class UsuarioControllerTest {
         url = "http://localhost:8080";
         passwordEncoder = new BCryptPasswordEncoder();
         usuarioController = new UsuarioController(usuarioRepository, passwordEncoder);
-        usuarios = List.of(new Usuario(1L, "Teste", "123456", "teste@teste.com"));
+        usuarios = List.of(new Usuario(1L, "Teste", "123456"));
         usuariosDto = UsuarioDto.converter(usuarios);
         uriBuilder = UriComponentsBuilder.fromUriString(url);
     }
@@ -64,7 +64,6 @@ class UsuarioControllerTest {
 
         assertEquals(usuarioSelecionado.getId(), usuarioRetornado.getId());
         assertEquals(usuarioSelecionado.getNome(), usuarioRetornado.getNome());
-        assertEquals(usuarioSelecionado.getEmail(), usuarioRetornado.getEmail());
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
     }
 
@@ -80,7 +79,7 @@ class UsuarioControllerTest {
     void deveResponderCreatedELocationQuandoCadastrarNovoUsuario() {
         long idNovoUsuario = 1L;
 
-        UsuarioForm usuarioForm = new UsuarioForm("LUANA", "123456", "teste@teste.com");
+        UsuarioForm usuarioForm = new UsuarioForm("LUANA", "123456");
 
         when(usuarioRepository.save(any(Usuario.class)))
                 .then(invocation -> {
@@ -95,7 +94,6 @@ class UsuarioControllerTest {
         UsuarioDto usuarioRetornado = resposta.getBody();
 
         assertEquals(usuarioForm.getNome(), usuarioRetornado.getNome());
-        assertEquals(usuarioForm.getEmail(), usuarioRetornado.getEmail());
         assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
         assertEquals(url + "/usuarios/" + idNovoUsuario, resposta.getHeaders().getLocation().toString());
     }
@@ -159,7 +157,7 @@ class UsuarioControllerTest {
     @Test
     void deveAlterarSenhaQuandoUsuarioExistirESenhaAnteriorForIgualSenhaCadastrada() {
         long idUsuario = 1L;
-        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123456"), "teste@teste.com");
+        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123456"));
 
         when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
 
@@ -185,7 +183,7 @@ class UsuarioControllerTest {
     @Test
     void naoDeveAlterarSenhaQuandoASenhaAnteriorInformadaNaoForIgualASenhaCadastradaParaUsuario() {
         long idUsuario = 1L;
-        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123457"), "teste@teste.com");
+        Usuario usuario = new Usuario(idUsuario, "Teste", passwordEncoder.encode("123457"));
 
         when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
 
