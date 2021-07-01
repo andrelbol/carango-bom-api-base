@@ -1,17 +1,14 @@
 package br.com.caelum.carangobom.usuario.model;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-import java.util.Objects;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class Usuario {
@@ -26,7 +23,7 @@ public class Usuario {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.senha = criptografarSenha(senha);
+		this.senha = senha;
 		this.email = email;
 	}
 
@@ -66,10 +63,9 @@ public class Usuario {
 	}
 
 	public void setSenha(String senha) {
-		this.senha = criptografarSenha(senha);
+		this.senha = senha;
 	}
-	
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -98,13 +94,5 @@ public class Usuario {
         		&& Objects.equals(nome, usuario.nome) 
         		&& Objects.equals(senha, usuario.senha)
         		&& Objects.equals(email, usuario.email);
-	}
-	
-	public boolean validarSenha(String senha) {
-		return new BCryptPasswordEncoder().matches(senha, this.senha);
-	}
-	
-	private String criptografarSenha(String senha) {
-		return new BCryptPasswordEncoder().encode(senha);
 	}
 }

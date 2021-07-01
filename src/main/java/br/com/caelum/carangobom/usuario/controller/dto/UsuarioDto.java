@@ -26,44 +26,22 @@ public class UsuarioDto {
 	private Long id;	
 	private String nome;	
 	private String email;
-	
-	
+
 	public Long getId() {
 		return id;
 	}
-
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
 	public String getNome() {
 		return nome;
 	}
 
-
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-
-
 	public String getEmail() {
 		return email;
 	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	
-
 
 	@Override
 	public int hashCode() {
@@ -75,8 +53,6 @@ public class UsuarioDto {
 		return result;
 	}
 
-
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -86,8 +62,6 @@ public class UsuarioDto {
         		&& Objects.equals(nome, usuario.nome) 
         		&& Objects.equals(email, usuario.email);
 	}
-
-
 
 	public static List<UsuarioDto> converter(List<Usuario> usuarios) {
 		return usuarios.stream().map(usuario -> new UsuarioDto(usuario.getId(), usuario.getNome(), usuario.getEmail())).collect(Collectors.toList());

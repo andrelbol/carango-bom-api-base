@@ -1,40 +1,34 @@
 package br.com.caelum.carangobom.usuario.controller;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import br.com.caelum.carangobom.usuario.controller.dto.UsuarioDto;
 import br.com.caelum.carangobom.usuario.controller.form.AlterarSenhaForm;
 import br.com.caelum.carangobom.usuario.controller.form.UsuarioForm;
 import br.com.caelum.carangobom.usuario.model.Usuario;
 import br.com.caelum.carangobom.usuario.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
 	
-	UsuarioRepository usuarioRepository;
-	
-	@Autowired
-	public UsuarioController(UsuarioRepository usuarioRepository) {
+	private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+	public UsuarioController(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
-	}
+        this.passwordEncoder = passwordEncoder;
+    }
 	
 	@GetMapping
 	public List<UsuarioDto> listar(){
@@ -51,7 +45,7 @@ public class UsuarioController {
 	@PostMapping
     @Transactional
     public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioForm usuarioForm, UriComponentsBuilder uriBuilder) {
-        Usuario usuarioCadastrado = usuarioRepository.save(usuarioForm.converter());
+        Usuario usuarioCadastrado = usuarioRepository.save(usuarioForm.converter(passwordEncoder));
         URI h = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuarioCadastrado.getId()).toUri();
         return ResponseEntity.created(h).body(new UsuarioDto(usuarioCadastrado));
     }
@@ -76,15 +70,17 @@ public class UsuarioController {
         
         if (usuarioAtual.isEmpty()) {
         	return ResponseEntity.notFound().build();
-        }   
-        
-        if(!usuarioAtual.get().validarSenha(alterarSenhaForm.getSenhaAnterior())) {
+        }
+
+        Usuario usuario = usuarioAtual.get();
+
+        if(!passwordEncoder.matches(alterarSenhaForm.getSenhaAnterior(), usuario.getSenha())) {
         	return ResponseEntity.badRequest().build();
     	}
     	
-        Usuario usuarioAlterado = alterarSenhaForm.atualizarSenha(usuarioAtual.get());
-    	return ResponseEntity.ok(new UsuarioDto(usuarioAlterado));   	
-        
+        Usuario usuarioAlterado = alterarSenhaForm.atualizarSenha(usuario);
+
+    	return ResponseEntity.ok(new UsuarioDto(usuarioAlterado));
     }
 	
 	@DeleteMapping("/{id}")

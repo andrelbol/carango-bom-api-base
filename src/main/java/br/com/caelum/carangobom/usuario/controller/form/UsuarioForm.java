@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.com.caelum.carangobom.usuario.model.Usuario;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UsuarioForm {
 	
@@ -51,8 +52,8 @@ public class UsuarioForm {
 		this.email = email;
 	}
 
-	public Usuario converter() {
-		return new Usuario(nome, senha, email);
+	public Usuario converter(PasswordEncoder passwordEncoder) {
+		return new Usuario(nome, passwordEncoder.encode(senha), email);
 	}
 
 	public Usuario atualizar(Usuario usuario) {
