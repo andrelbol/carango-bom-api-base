@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MarcaController.class)
+@ActiveProfiles("test")
 class MarcaRestControllerTest {
 
     @Autowired
@@ -30,6 +32,7 @@ class MarcaRestControllerTest {
 
     private UriComponentsBuilder uriBuilder;
 
+//  ToDo: Parar de mockar as repositories;
     @MockBean
     private MarcaRepository marcaRepository;
 
