@@ -38,7 +38,7 @@ class TokenServiceTest {
     }
 
     @Test
-    public void deveGerarTokenValido() {
+    void deveGerarTokenValido() {
         Usuario usuario = new Usuario(1L, "teste", "123456");
         when(authentication.getPrincipal()).thenReturn(usuario);
         String token = tokenService.gerarToken(authentication);
@@ -49,7 +49,7 @@ class TokenServiceTest {
     }
 
     @Test
-    public void deveVerificarTokenInvalido(){
+    void deveVerificarTokenInvalido(){
         String tokenInvalido = "Bearer 2222222";
         assertFalse(tokenService.isTokenValido(tokenInvalido));
     }

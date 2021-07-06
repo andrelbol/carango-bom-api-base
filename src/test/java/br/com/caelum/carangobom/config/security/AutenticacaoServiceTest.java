@@ -27,14 +27,14 @@ class AutenticacaoServiceTest {
     Usuario usuarioTeste;
 
     @BeforeEach
-    private void setUp() {
+    public void setUp() {
         openMocks(this);
         usuarioTeste = new Usuario(1L, "teste", "teste");
     }
 
 
     @Test
-    public void deveRetornarDetalhesDoUsuarioExistente() {
+    void deveRetornarDetalhesDoUsuarioExistente() {
         Optional<Usuario> optionalUsuario = Optional.of(usuarioTeste);
         when(usuarioRepository.findByNome(usuarioTeste.getNome())).thenReturn(optionalUsuario);
 
@@ -44,7 +44,7 @@ class AutenticacaoServiceTest {
     }
 
     @Test
-    public void deveLancarExcecaoQuandoUsuarioNaoExiste() {
+    void deveLancarExcecaoQuandoUsuarioNaoExiste() {
         when(usuarioRepository.findByNome(usuarioTeste.getNome())).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> autenticacaoService.loadUserByUsername("teste"));

@@ -29,15 +29,15 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         if (valido) {
             autenticarCliente(token);
         }
-
         filterChain.doFilter(request, response);
     }
 
     private void autenticarCliente(String token) {
         Long idUsuario = tokenService.getIdUsuario(token);
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        usuarioRepository.findById(idUsuario).ifPresent((usuario) -> {
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        });
     }
 
     private String recuperarToken(HttpServletRequest request) {
