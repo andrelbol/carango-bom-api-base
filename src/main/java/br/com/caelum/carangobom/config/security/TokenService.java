@@ -50,4 +50,11 @@ public class TokenService {
         Claims body = getClaimsJws(token).getBody();
         return Long.parseLong(body.getSubject());
     }
+
+    public String extrairToken(String headerAuth) {
+        if (headerAuth == null || headerAuth.isEmpty() || !headerAuth.startsWith("Bearer ")) {
+            return null;
+        }
+        return headerAuth.substring(7);
+    }
 }
