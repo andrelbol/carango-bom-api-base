@@ -1,6 +1,5 @@
 package br.com.caelum.carangobom.config.security;
 
-import br.com.caelum.carangobom.usuario.model.Usuario;
 import br.com.caelum.carangobom.usuario.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

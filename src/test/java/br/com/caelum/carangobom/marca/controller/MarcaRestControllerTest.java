@@ -39,7 +39,6 @@ class MarcaRestControllerTest {
 
     private UriComponentsBuilder uriBuilder;
 
-//  ToDo: Parar de mockar as repositories;
     @Autowired
     private MarcaRepository marcaRepository;
 
