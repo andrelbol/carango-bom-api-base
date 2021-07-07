@@ -47,6 +47,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioForm usuarioForm, UriComponentsBuilder uriBuilder) {
         Usuario usuarioCadastrado = usuarioRepository.save(usuarioForm.converter(passwordEncoder));
         URI h = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuarioCadastrado.getId()).toUri();
+//      ToDo: Tratar exceção de usuário já existente (ConstraintException)
         return ResponseEntity.created(h).body(new UsuarioDto(usuarioCadastrado));
     }
 	
