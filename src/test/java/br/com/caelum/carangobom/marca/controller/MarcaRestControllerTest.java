@@ -4,11 +4,16 @@ import br.com.caelum.carangobom.marca.model.Marca;
 import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,7 +28,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = MarcaController.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 class MarcaRestControllerTest {
 
@@ -33,7 +40,7 @@ class MarcaRestControllerTest {
     private UriComponentsBuilder uriBuilder;
 
 //  ToDo: Parar de mockar as repositories;
-    @MockBean
+    @Autowired
     private MarcaRepository marcaRepository;
 
     private List<Marca> marcas;
@@ -50,19 +57,19 @@ class MarcaRestControllerTest {
 
     @Test
     void deveRetornarListaQuandoHouverResultados() throws Exception {
-        given(marcaRepository.findByOrderByNome())
-                .willReturn(marcas);
+
+        marcaRepository.saveAll(marcas);
 
         this.mockMvc.perform(get("/marcas"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(marcas.size())));
 
+        //marcaRepository.deleteAll();
+
     }
 
     @Test
     void deveValidarFormatoDeEntradaNoCadastro() throws Exception {
-        given(marcaRepository.save(any()))
-                .willReturn(new Marca(1L, "teste"));
 
         this.mockMvc.perform(post("/marcas")
                 .contentType(MediaType.APPLICATION_JSON)

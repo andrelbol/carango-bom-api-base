@@ -6,11 +6,15 @@ import br.com.caelum.carangobom.veiculo.model.Veiculo;
 import br.com.caelum.carangobom.veiculo.repository.VeiculoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,8 +30,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@WebMvcTest(controllers = VeiculoController.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 class VeiculoRestControllerTest {
     @Autowired
@@ -35,10 +40,10 @@ class VeiculoRestControllerTest {
 
     private UriComponentsBuilder uriBuilder;
 
-    @MockBean
+    @Autowired
     private MarcaRepository marcaRepository;
 
-    @MockBean
+    @Autowired
     private VeiculoRepository veiculoRepository;
 
     private List<Veiculo> veiculos;
@@ -54,7 +59,10 @@ class VeiculoRestControllerTest {
 
     @Test
     void deveRetornarListaQuandoHouverResultados() throws Exception {
-        given(veiculoRepository.findByOrderByModelo()).willReturn(veiculos);
+
+        marcaRepository.save(new Marca(1L,"VW"));
+
+        veiculoRepository.saveAll(veiculos);
 
         this.mockMvc.perform(get("/veiculos"))
                 .andExpect(status().isOk())
@@ -64,8 +72,6 @@ class VeiculoRestControllerTest {
 
     @Test
     void deveValidarFormatoDeEntradaNoCadastro() throws Exception {
-        Veiculo gol = new Veiculo(1L, new Marca(1L, "VW"), 2021, "Gol", new BigDecimal("25000"));
-        given(veiculoRepository.save(any())).willReturn(gol);
 
         this.mockMvc.perform(post("/veiculos")
                 .contentType(MediaType.APPLICATION_JSON)
