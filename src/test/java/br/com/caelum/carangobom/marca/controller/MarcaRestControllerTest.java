@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -43,9 +44,9 @@ class MarcaRestControllerTest {
     public void configuraMock() {
         openMocks(this);
         marcas = List.of(
-                new Marca(1L, "Audi"),
-                new Marca(2L, "BMW"),
-                new Marca(3L, "Fiat"));
+                new Marca("Audi"),
+                new Marca("BMW"),
+                new Marca("Fiat"));
         uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
     }
 
@@ -58,8 +59,7 @@ class MarcaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(marcas.size())));
 
-        //marcaRepository.deleteAll();
-
+        marcaRepository.deleteAll();
     }
 
     @Test
@@ -79,6 +79,8 @@ class MarcaRestControllerTest {
         this.mockMvc.perform(get("/marcas/dashboard"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(marcas.size())));
+
+        marcaRepository.deleteAll();
     }
 
 }
