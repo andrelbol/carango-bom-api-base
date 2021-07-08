@@ -15,9 +15,9 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=jdbc:postgresql://db/carangobom
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=123
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/carangobom
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123
       - PORT=8080
       - SPRING_PROFILES_ACTIVE=prod
   db:
