@@ -13,12 +13,14 @@ class TokenDtoTest {
         TokenDto tokenIgual = new TokenDto("teste", "teste");
         TokenDto tokenTipoDiferente = new TokenDto("teste", "diferente");
         TokenDto tokenNomeDiferente = new TokenDto("diferente", "teste");
+        Object outro = new Object();
+        Object nulo = null;
         assertEquals(tokenDto, tokenDuplicado);
         assertEquals(tokenDto, tokenIgual);
         assertNotEquals(tokenDto, tokenTipoDiferente);
         assertNotEquals(tokenDto, tokenNomeDiferente);
-        Object outro = new Object();
         assertNotEquals(tokenDto, outro);
+        assertNotEquals(tokenDto, nulo);
 
     }
 

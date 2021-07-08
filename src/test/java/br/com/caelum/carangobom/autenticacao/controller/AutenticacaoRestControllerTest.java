@@ -80,7 +80,7 @@ class AutenticacaoRestControllerTest {
     }
 
     @Test
-    void deveAutenticarUsuarioInvalido() throws Exception {
+    void naoDeveAutenticarUsuarioInvalido() throws Exception {
 
         UsuarioForm usuarioForm = new UsuarioForm("UsuarioTesteInvalido", "123456");
         ResponseEntity<UsuarioDto> cadastrar = usuarioController.cadastrar(usuarioForm, uriBuilder);

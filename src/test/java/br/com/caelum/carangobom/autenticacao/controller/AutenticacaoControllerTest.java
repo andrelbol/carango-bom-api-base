@@ -49,7 +49,7 @@ class AutenticacaoControllerTest {
     }
 
     @Test
-    public void deveAutenticarUsuarioERetornarTokenJWT() {
+    void deveAutenticarUsuarioERetornarTokenJWT() {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginForm.getNome(), loginForm.getSenha());
         when(authenticationManager.authenticate(usernamePasswordAuthenticationToken)).thenReturn(usernamePasswordAuthenticationToken);
@@ -62,7 +62,7 @@ class AutenticacaoControllerTest {
     }
 
     @Test
-    public void deveAutenticarUsuarioInvalidoERetornarBadRequest() {
+    void naoDeveAutenticarUsuarioInvalidoERetornarBadRequest() {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginForm.getNome(), loginForm.getSenha());
         when(authenticationManager.authenticate(usernamePasswordAuthenticationToken)).thenThrow(new UsernameNotFoundException("Dados Inválidos"));
@@ -75,7 +75,7 @@ class AutenticacaoControllerTest {
     }
 
     @Test
-    public void deveVerificarTokenERetornarUsuarioAutenticado(){
+    void deveVerificarTokenERetornarUsuarioAutenticado() {
         String headerAuth = "Bearer NovoToken";
 
         String novoToken = "NovoToken";
@@ -93,7 +93,7 @@ class AutenticacaoControllerTest {
 
 
     @Test
-    public void deveVerificarTokenERetornarNotFoundQuandoTokenValidoEUsuarioNaoExisteMais(){
+    void deveVerificarTokenERetornarNotFoundQuandoTokenValidoEUsuarioNaoExisteMais() {
         String headerAuth = "Bearer NovoToken";
 
         String novoToken = "NovoToken";
@@ -109,7 +109,7 @@ class AutenticacaoControllerTest {
     }
 
     @Test
-    public void deveVerificarTokenERetornarBadRequestQuandoForInvalido(){
+    void deveVerificarTokenERetornarBadRequestQuandoForInvalido() {
         String headerAuth = "Bearer NovoToken";
 
         String novoToken = "NovoToken";
