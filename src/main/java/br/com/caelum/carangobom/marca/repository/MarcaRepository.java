@@ -11,12 +11,12 @@ public interface MarcaRepository extends JpaRepository<Marca, Long> {
 
     List<Marca> findByOrderByNome();
 
-    @Query("SELECT m as marca,COUNT(v) as quantidadeVeiculos, SUM(v.valor) as valorTotalVeiculos\n" +
+    @Query(value = "SELECT m as marca,COUNT(v) as quantidadeVeiculos, SUM(v.valor) as valorTotalVeiculos\n" +
             "FROM Veiculo v\n" +
             "RIGHT JOIN Marca m\n" +
             "ON v.marca = m\n" +
             "GROUP BY m")
-    List <DashboardMarcaProjecao> getSumarioMarcas();
+    List<DashboardMarcaProjecao> getSumarioMarcas();
 
 
 }
