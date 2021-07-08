@@ -1,0 +1,44 @@
+version: '3.3'
+services:
+  carango-bom:
+    build:
+      dockerfile: 'Dockerfile'
+      context: './'
+    image: carango-bom-api-grupo-5
+    container_name: carango-bom-api
+    ports: 
+      - '8080:8080'
+    expose:
+        - '8080'
+    networks:
+      - carango-bom-network
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=jdbc:mysql://db/carangobom?createDatabaseIfNotExist=true
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=
+      - PORT=8080
+      - SPRING_PROFILES_ACTIVE=prod
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'carangobom'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - carango-bom-network
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:
+networks:
+  carango-bom-network: 
