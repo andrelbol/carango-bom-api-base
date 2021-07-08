@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,8 +20,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,23 +47,24 @@ class VeiculoRestControllerTest {
     @BeforeEach
     void setup() {
         openMocks(this);
-        veiculos = List.of(
-                new Veiculo(1L, new Marca(1L, "VW"), 2021, "Gol", new BigDecimal("25000"))
-        );
         uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
     }
 
     @Test
     void deveRetornarListaQuandoHouverResultados() throws Exception {
 
-        marcaRepository.save(new Marca(1L,"VW"));
-
+        Marca vw = marcaRepository.save(new Marca("VW"));
+        veiculos = List.of(
+                new Veiculo(vw, 2021, "Gol", new BigDecimal("25000"))
+        );
         veiculoRepository.saveAll(veiculos);
 
         this.mockMvc.perform(get("/veiculos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(veiculos.size())));
 
+        veiculoRepository.deleteAll();
+        marcaRepository.deleteAll();
     }
 
     @Test
@@ -78,5 +75,4 @@ class VeiculoRestControllerTest {
                 .content("{\"name\":\"teste\"}"))
                 .andExpect(status().isBadRequest());
     }
-    /**/
 }
