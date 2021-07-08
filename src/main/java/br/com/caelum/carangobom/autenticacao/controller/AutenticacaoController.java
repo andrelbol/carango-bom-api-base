@@ -47,7 +47,7 @@ public class AutenticacaoController {
         String token = tokenService.extrairToken(authorization);
         try {
             Long idUsuario = tokenService.getIdUsuario(token);
-            return usuarioRepository.findById(idUsuario).map((usuario) -> {
+            return usuarioRepository.findById(idUsuario).map(usuario -> {
                 UsuarioDto usuarioDto = new UsuarioDto(usuario);
                 return ResponseEntity.ok(usuarioDto);
             }).orElseGet(() -> ResponseEntity.notFound().build());
