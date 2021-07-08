@@ -6,22 +6,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,9 +44,9 @@ class MarcaRestControllerTest {
     public void configuraMock() {
         openMocks(this);
         marcas = List.of(
-                new Marca(1L, "Audi"),
-                new Marca(2L, "BMW"),
-                new Marca(3L, "Fiat"));
+                new Marca("Audi"),
+                new Marca("BMW"),
+                new Marca("Fiat"));
         uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
     }
 
@@ -63,8 +59,7 @@ class MarcaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(marcas.size())));
 
-        //marcaRepository.deleteAll();
-
+        marcaRepository.deleteAll();
     }
 
     @Test
@@ -74,6 +69,18 @@ class MarcaRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"teste\"}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornarDashboardQuandoHouverResultados() throws Exception {
+
+        marcaRepository.saveAll(marcas);
+
+        this.mockMvc.perform(get("/marcas/dashboard"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(marcas.size())));
+
+        marcaRepository.deleteAll();
     }
 
 }

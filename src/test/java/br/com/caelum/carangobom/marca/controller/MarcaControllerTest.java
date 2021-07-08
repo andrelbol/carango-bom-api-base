@@ -1,7 +1,9 @@
 package br.com.caelum.carangobom.marca.controller;
 
+import br.com.caelum.carangobom.marca.controller.dto.DashboardMarcaDto;
 import br.com.caelum.carangobom.marca.controller.dto.MarcaDto;
 import br.com.caelum.carangobom.marca.controller.form.MarcaForm;
+import br.com.caelum.carangobom.marca.model.DashboardMarcaProjecao;
 import br.com.caelum.carangobom.marca.model.Marca;
 import br.com.caelum.carangobom.marca.repository.MarcaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,13 @@ class MarcaControllerTest {
 
     @Mock
     private MarcaRepository marcaRepository;
+
+    @Mock
+    private DashboardMarcaProjecao primeiroItem;
+    @Mock
+    private DashboardMarcaProjecao segundoItem;
+    @Mock
+    private DashboardMarcaProjecao terceiroItem;
 
     @BeforeEach
     public void configuraMock() {
@@ -129,7 +139,7 @@ class MarcaControllerTest {
 
     @Test
     void deveDeletarMarcaExistente() {
-        Marca audi = new Marca(1l, "Audi");
+        Marca audi = new Marca(1L, "Audi");
 
         when(marcaRepository.findById(1L))
                 .thenReturn(Optional.of(audi));
@@ -151,6 +161,25 @@ class MarcaControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
 
         verify(marcaRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void deveRetornarDashboardMarcasQuandoHouverResultados() {
+        List<DashboardMarcaProjecao> dashboard = List.of(
+                primeiroItem,
+                primeiroItem
+        );
+
+        when(primeiroItem.getMarca()).thenReturn(new Marca(1L, "Audi"));
+        when(primeiroItem.getQuantidadeVeiculos()).thenReturn(2);
+        when(primeiroItem.getValorTotalVeiculos()).thenReturn(new BigDecimal("500000"));
+
+        when(marcaRepository.getSumarioMarcas())
+                .thenReturn(dashboard);
+
+        List<DashboardMarcaDto> marcasDtos = DashboardMarcaDto.converter(dashboard);
+        List<DashboardMarcaDto> resultado = marcaController.consultaDashboardMarcas();
+        assertEquals(marcasDtos, resultado);
     }
 
 

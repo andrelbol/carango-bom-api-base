@@ -1,5 +1,6 @@
 package br.com.caelum.carangobom.marca.controller;
 
+import br.com.caelum.carangobom.marca.controller.dto.DashboardMarcaDto;
 import br.com.caelum.carangobom.marca.controller.dto.MarcaDto;
 import br.com.caelum.carangobom.marca.controller.form.MarcaForm;
 import br.com.caelum.carangobom.marca.model.Marca;
@@ -69,6 +70,11 @@ public class MarcaController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/dashboard")
+    public List<DashboardMarcaDto> consultaDashboardMarcas() {
+        return DashboardMarcaDto.converter(marcaRepository.getSumarioMarcas());
     }
 
 }
