@@ -15,22 +15,25 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=jdbc:postgresql://db/carangobom
+      - DATABASE_URL=jdbc:mysql://db/carangobom?createDatabaseIfNotExist=true
       - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=123
+      - DATABASE_PASSWORD=
       - PORT=8080
       - SPRING_PROFILES_ACTIVE=prod
   db:
-    image: postgres
+    image: mysql:5.7
     restart: always
     environment:
-      POSTGRES_DB: 'carangobom'
-      POSTGRES_USER: 'root'
-      POSTGRES_PASSWORD: '123'
+      MYSQL_DATABASE: 'carangobom'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_ROOT_HOST: '%'
     ports:
-      - '5432:5432'
+      - '3306:3306'
     expose:
-      - '5432'
+      - '3306'
     networks:
       - carango-bom-network
     volumes:
