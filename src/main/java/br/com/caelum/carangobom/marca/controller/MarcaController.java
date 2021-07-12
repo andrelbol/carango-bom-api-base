@@ -28,13 +28,11 @@ public class MarcaController {
     }
 
     @GetMapping
-    @Transactional //ToDo: Não necessita controle transacional no select;
     public List<MarcaDto> lista() {
         return MarcaDto.converter(marcaRepository.findByOrderByNome());
     }
 
     @GetMapping("/{id}")
-    @Transactional //ToDo: Não necessita controle transacional no select;
     public ResponseEntity<MarcaDto> id(@PathVariable Long id) {
         Optional<Marca> marcaEncontrada = marcaRepository.findById(id);
         return marcaEncontrada.map(marca -> ResponseEntity.ok(new MarcaDto(marca))).orElseGet(() -> ResponseEntity.notFound().build());
