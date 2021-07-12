@@ -21,16 +21,16 @@ public class MethodArgumentNotValidExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ListaDeErrosOutputDto handle(MethodArgumentNotValidException excecao) {
-        List<ErroDeParametroOutputDto> saidaDto = new ArrayList<>();
+        List<ErroDeParametroOutputDto> listaDeErros = new ArrayList<>();
         excecao.getBindingResult().getFieldErrors().forEach(e -> {
-            ErroDeParametroOutputDto d = new ErroDeParametroOutputDto();
-            d.setParametro(e.getField());
+            ErroDeParametroOutputDto erroDeParametroDto = new ErroDeParametroOutputDto();
+            erroDeParametroDto.setParametro(e.getField());
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-            d.setMensagem(mensagem);
-            saidaDto.add(d);
+            erroDeParametroDto.setMensagem(mensagem);
+            listaDeErros.add(erroDeParametroDto);
         });
-        ListaDeErrosOutputDto l2 = new ListaDeErrosOutputDto();
-        l2.setErros(saidaDto);
-        return l2;
+        ListaDeErrosOutputDto listaDeErrosOutputDto = new ListaDeErrosOutputDto();
+        listaDeErrosOutputDto.setErros(listaDeErros);
+        return listaDeErrosOutputDto;
     }
 }
